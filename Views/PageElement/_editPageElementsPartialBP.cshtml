@@ -1,0 +1,127 @@
+@model CMS.Models.Page
+
+@{
+    var groupImageIndex = 0;
+    var groupTextIndex = 0;
+
+for(int index = 0; index < Model.PageElements.Count; index++)
+{
+    var pageEl = @Model.PageElements[index];
+    var pageID = ViewData["PageID"];
+    var type = pageEl.Type.ToString();
+    var groupID = @Model.PageElements[index].GroupID;
+    var groupName = @Model.PageElements[index].Name;
+    var slideIndex = @Model.PageElements[index].SortOrder;
+    var currentSlideIndex = 0;
+    
+    var groupClass = groupID != null ? "group-item well" : "";
+    
+
+    <div class="@groupClass">
+
+    @if(@Model.PageElements[index].GroupID != null){
+
+        @if(currentSlideIndex != slideIndex){
+            {groupTextIndex = 0;}
+            {groupImageIndex = 0;}
+            {currentSlideIndex += 1;}
+        }
+        
+        @if( (type == "Text" && groupTextIndex < 1   ) || ( type == "Image" && groupImageIndex < 1) ){
+            <div class="form-group">
+                
+                <div>Group: @groupName</div>                
+            
+
+                @if(type == "Text" && groupTextIndex < 1){
+                    <span>Text: </span>
+                    <div>@Model.PageElements[index].Body</div>
+                    <a 
+                        asp-action="Edit" 
+                        asp-controller="PageElementGroup" 
+                        asp-route-id="@Model.PageElements[index].GroupID"
+                    >
+                        Edit Group
+                    </a>
+                    <a 
+                        asp-action="DeleteSlide" 
+                        asp-controller="PageElementGroup" 
+                        asp-route-groupID="@Model.PageElements[index].GroupID"
+                        asp-route-slideIndex="@Model.PageElements[index].SortOrder"
+                    >
+                        Delete Slide
+                    </a>
+                    
+                        {groupTextIndex += 1;}
+                }else if(type == "Image" && groupImageIndex < 1){
+
+                    <div>
+                        <span>Image:</span>
+                        @if(Model.PageElements[index].ImagePath != null){
+                            <span>@Model.PageElements[index].FileName</span>
+                            <img src="@Model.PageElements[index].ImagePath" width="50" height="50" />
+                        }
+                    </div>
+                        {groupImageIndex += 1;}
+                }
+                
+            </div>
+        }
+    } else if(@Model.PageElements[index].GroupID == null) {
+        <div class="form-group">
+            <div>index: @index</div>
+            <label asp-for="@Model.PageElements[index].Name">Name:</label> 
+            <input asp-for="@Model.PageElements[index].Name" value="@Model.PageElements[index].Name" />
+            <input type="hidden" asp-for="@Model.PageElements[index].Type" value="@Model.PageElements[index].Type">
+            <input type="hidden" asp-for="@Model.PageElements[index].SortOrder" value="@Model.PageElements[index].SortOrder">
+            <input type="hidden" asp-for="@Model.PageElements[index].ID" value="@Model.PageElements[index].ID">
+            <input type="hidden" asp-for="@Model.PageElements[index].PageID" value="@Model.PageElements[index].PageID">
+            
+
+            @if(type == "Text"){
+                <div>
+                    <label asp-for="@Model.PageElements[index].Body">Text:</label>
+                    <input asp-for="@Model.PageElements[index].Body" value="@Model.PageElements[index].Body" />
+                </div>
+            }
+            else if(type == "Link"){
+                <div>
+                    <label asp-for="@Model.PageElements[index].LinkTitle">LinkTitle:</label>
+                    <input class="form-control" asp-for="@Model.PageElements[index].LinkTitle" value="@Model.PageElements[index].LinkTitle" />
+                    <label asp-for="@Model.PageElements[index].Path">Path:</label>
+                    <input class="form-control" asp-for="@Model.PageElements[index].Path" value="@Model.PageElements[index].Path" />
+                </div>
+            }
+            else if(type == "Blurb"){
+                <div>
+                    Text:
+                    <div class="summernote">@Model.PageElements[index].Body</div>
+                    <input type="hidden" asp-for="@Model.PageElements[index].Body" value="@Model.PageElements[index].Body">
+                </div>
+            }
+            else if(type == "Image"){
+
+                <div>
+                    <span>Image:</span>
+
+                    @if(Model.PageElements[index].ImagePath != null){
+                        <span>@Model.PageElements[index].FileName</span>
+                        <img src="@Model.PageElements[index].ImagePath" width="50" height="50" />
+                        <input type="hidden" asp-for="@Model.PageElements[index].FileName" value="@Model.PageElements[index].FileName">
+                        <input type="hidden" asp-for="@Model.PageElements[index].ImagePath" value="@Model.PageElements[index].ImagePath">
+                        
+                    } else{
+                        <input type="file" class="ignore-post" name="TempFile" id="TempFile-@index" onchange="Site.uploadImage(this, @Model.PageElements[index].ID, @pageID)" >
+                    }
+                </div>
+            }
+        <a asp-action="Delete" asp-controller="PageElement" asp-route-id="@Model.PageElements[index].ID">Delete</a>
+        </div>
+    }
+    
+    </div>
+    
+    
+
+}
+}

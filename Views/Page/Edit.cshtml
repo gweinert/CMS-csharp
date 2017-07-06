@@ -1,0 +1,62 @@
+@model CMS.ViewModels.EditPageElements
+
+
+
+<div>
+    <h1>Edit @Model.Page.Title Page</h1>
+    <h1>ID @Model.Page.ID Page</h1>
+    
+
+    <form asp-action="Edit" method="Post">
+        <label asp-for="Page.Title"></label>
+        <input type="text" asp-for="Page.Title" value="@Model.Page.Title">
+        <label asp-for="Page.Link"></label>
+        <input type="text" asp-for="Page.Link" value="@Model.Page.Link">
+        <label asp-for="Page.SortOrder"></label>
+        <input type="text" asp-for="Page.SortOrder" value="@Model.Page.SortOrder" >
+        
+         @Html.Partial("../PageElement/_EditPageElementsPartial.cshtml", @Model)
+
+@{ 
+    var numberOfTextEls = 0;
+    var numberOfGroupIDs = 0;
+}
+@for(int index = 0; index < Model.GroupPageElements.Count; index++)
+{
+    var groupPageEl = Model.GroupPageElements[index];
+    var type = groupPageEl.Type.ToString();
+    int? groupID = null;
+
+    @if(groupID != Model.GroupPageElements[index].GroupID)
+    {
+        {numberOfTextEls = 0;}
+        @if(numberOfGroupIDs < 1){
+            <div>
+                Groupp @Model.GroupPageElements[index].GroupID
+                <a asp-action="Edit" asp-controller="PageElementGroup" asp-route-id="@groupPageEl.GroupID">Edit Group</a>
+            </div>
+            {numberOfGroupIDs = 0;}
+        }
+        
+    }
+    {numberOfGroupIDs = 1;}
+     
+     @if(type == "Text" && numberOfTextEls < 1){
+        <div>
+            <div>@groupPageEl.Name: @groupPageEl.Body</div>
+            
+        </div>
+        {numberOfTextEls += 1;}
+    }
+
+    {groupID = Model.GroupPageElements[index].GroupID;}
+}
+
+        
+        <button type="submit">Save</button>
+    </form>
+
+    <a asp-action="Create" asp-controller="PageElement" asp-route-id="@Model.Page.ID">Add Element +</a>
+    <a asp-action="Create" asp-controller="PageElementGroup"asp-route-id="@Model.Page.ID">Add Group +</a>
+    <br />
+</div>

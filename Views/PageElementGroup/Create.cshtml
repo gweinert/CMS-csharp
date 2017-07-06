@@ -1,0 +1,58 @@
+@model CMS.Models.PageElement
+
+<div>
+    <h1>Create New Group</h1>
+    <p>Choose elements below to build each slide in group.</p>
+    <form asp-action="Create" method="POST">
+        <div>
+            Text: <input type="checkbox" name="text" value="PageElementType.Text" />
+            Quantity: 
+            <select name="text-quant">
+                <option value="0" selected disabled>0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </div>
+        <div>
+            Blurb: <input type="checkbox" name="blurb" value="PageElementType.Blurb" />
+            Quantity: 
+            <select name="blurb-quant">
+                <option value="0" selected disabled>0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </div>
+        <div>
+            Image: <input type="checkbox" name="image" value="PageElementType.Image" />
+            Quantity: 
+            <select name="image-quant">
+                <option value="0" selected disabled>0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </div>
+        <div>
+            Link: <input type="checkbox" name="link" value="PageElementType.Link" />
+            Quantity: 
+            <select name="link-quant">
+                <option value="0" selected disabled>0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+
+</div>

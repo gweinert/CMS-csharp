@@ -1,0 +1,10 @@
+
+<div>
+    <h1>PAGE ELEMENT Groups Index</h1>
+    @foreach(var el in @Model){
+        <div>Name: @el.Name</div>
+        <div>PageID: @el.PageID</div>
+        <div>GroupID: @el.ID</div>
+        <a asp-action="Delete" asp-route-id="@el.ID">Delete</a>
+    }
+</div>

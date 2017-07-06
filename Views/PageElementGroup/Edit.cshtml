@@ -1,0 +1,89 @@
+@model CMS.ViewModels.PageElGroup
+@{
+    int index = 0;
+    var pageElGroup = @Model.PageElementGroup;
+    var groupPageEls = @Model.GroupedPageElements;
+    var currentSortOrder = 0;
+    var fieldsToASlide = @Model.PageElementGroup.NumberOfFields;
+}
+
+<h1>Edit Page Group Elements</h1>
+<form asp-action="Edit" method="POST">
+
+    <div>
+        <span>Group Name: </span>
+        <input type="text" name="Name" value="@pageElGroup.Name"/>
+    </div>
+    
+    <div class="group-item well">    
+    
+    @if(groupPageEls != null){
+
+        @foreach( var groupEl in @groupPageEls )
+        {
+            <div>sortOrder: @groupEl.SortOrder</div>
+            <div> current order: @currentSortOrder</div>
+            
+            Index: <span>@index</span>
+            <div>
+                <span>Group Item Name:</span>
+
+                <input type="text" name="@groupEl.ID-name" value="@groupEl.Name"/>
+            </div>
+
+            @if(groupEl.Type.ToString() == "Text"){
+                <div>
+                    <label>Text:</label>
+                    <input name="@groupEl.ID-text" value="@groupEl.Body" />
+                </div>
+            }
+            else if(@groupEl.Type.ToString() == "Link"){
+                <div>
+                    <label>LinkTitle:</label>
+                    <input class="form-control" name="@groupEl.ID-linkTitle" value="@groupEl.LinkTitle" />
+                    <label >Path:</label>
+                    <input class="form-control" name="@groupEl.ID-path" value="@groupEl.Path" />
+                </div>
+            }
+            else if(@groupEl.Type.ToString() == "Blurb"){
+                <div>
+                    Text:
+                    <div class="summernote">@groupEl.Body</div>
+                    <input type="hidden" name="@groupEl.ID-blurb" />
+                </div>
+            }
+            else if(@groupEl.Type.ToString() == "Image"){
+                <div>
+                    <span>Image (js):</span>
+                    @if(groupEl.ImagePath != null){
+                        <span>@groupEl.FileName</span>
+                        <img src="@groupEl.ImagePath" width="50" height="50" />
+                    } else{
+                        <input type="file" class="ignore-post" name="TempFile" id="TempFile-@groupEl.ID" onchange="Site.uploadImage(this, @groupEl.ID, @groupEl.PageID)" >
+                    }
+                </div>
+            }
+            else{
+                <div></div>
+            }
+
+            @if( (index + 1) % (fieldsToASlide ) == 0){
+                <a 
+                    asp-action="DeleteSlide" 
+                    asp-route-groupID="@groupEl.GroupID"
+                    asp-route-slideIndex="@groupEl.SortOrder"
+                >
+                    Delete Slide
+                </a>
+                <div class="well-spacer"></div>
+                
+                if(groupEl.SortOrder != 0){currentSortOrder += 1;}
+            }
+            {index += 1;}
+        }
+    }
+    </div>
+    
+    <button type="submit">Save</button>
+</form>
+<a asp-action="AddSlide" asp-route-id="@pageElGroup.ID">Add Slide+</a>

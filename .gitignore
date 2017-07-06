@@ -1,0 +1,5 @@
+# Sensitive data
+appsettings.*.json
+appsettings.json
+bin/Debug/*
+obj/Debug/*

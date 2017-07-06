@@ -1,0 +1,54 @@
+@model CMS.Models.Site
+
+<div>
+    @Model.Name
+
+    <h2>Pages: </h2>
+    <div>
+        @foreach(var page in @Model.Pages){
+
+            <div>
+                @if(page.ParentID == 0){
+
+                    <span>@page.Title</span>
+                    <a asp-controller="Page" asp-action="Edit" asp-route-id="@page.ID">Edit</a>
+                    @Html.ActionLink("Delete", "Delete", "Page", new { id = page.ID },
+                        new { onclick = "return confirm('Are sure wants to delete?');" })
+                    <a asp-controller="Page" asp-action="Create" asp-route-id="@page.SiteID" asp-route-pageID="@page.ID">Add SubPage +</a>
+                }
+                
+                @if(page.ChildPages != null && page.ParentID == 0){
+
+                    <ul>
+                        @foreach(var childPage in @page.ChildPages)
+                        {
+                            <li>
+                                <span>@childPage.Title</span>
+                                <a asp-controller="Page" asp-action="Edit" asp-route-id="@childPage.ID">Edit</a>
+                                @Html.ActionLink("Delete", "Delete", "Page", new { id = childPage.ID },
+                                    new { onclick = "return confirm('Are sure wants to delete?');" })
+                                <a asp-controller="Page" asp-action="Create" asp-route-id="@childPage.SiteID" asp-route-pageID="@childPage.ID">Add SubPage +</a>
+
+                                @if(childPage.ChildPages != null){
+                                    <ul>
+                                        @foreach(var level2ChildPage in @childPage.ChildPages)
+                                        {
+                                            <li>
+                                                <span>@level2ChildPage.Title</span>
+                                                <a asp-controller="Page" asp-action="Edit" asp-route-id="@level2ChildPage.ID">Edit</a>
+                                                @Html.ActionLink("Delete", "Delete", "Page", new { id = level2ChildPage.ID },
+                                                    new { onclick = "return confirm('Are sure wants to delete?');" })
+                                            </li>
+                                        }
+                                    </ul>
+                                }
+                            </li>
+                        }
+                    </ul>
+                }
+            </div>
+        }
+    </div>
+    <a asp-controller="Page" asp-action="Create" asp-route-id="@Model.ID">Add New Page</a>
+
+</div>

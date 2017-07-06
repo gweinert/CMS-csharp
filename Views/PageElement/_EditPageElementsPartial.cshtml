@@ -1,0 +1,78 @@
+@model CMS.ViewModels.EditPageElements
+
+
+
+@for(int index = 0; index < Model.PageElements.Count; index++)
+{
+    var pageEl = @Model.PageElements[index];
+    var pageID = ViewData["PageID"];
+    var type = pageEl.Type.ToString();
+    var groupID = @Model.PageElements[index].GroupID;
+    var groupName = @Model.PageElements[index].Name;
+    var slideIndex = @Model.PageElements[index].SortOrder;
+    var currentSlideIndex = 0;
+    
+    var groupClass = groupID != null ? "group-item well" : "";
+    
+
+    <div class="@groupClass">
+
+        <div class="form-group">
+            <div>index: @index</div>
+            <div>groupID:  @Model.PageElements[index].GroupID</div>
+            <label asp-for="@Model.PageElements[index].Name">Name:</label> 
+            <input asp-for="@Model.PageElements[index].Name" value="@Model.PageElements[index].Name" />
+            <input type="hidden" asp-for="@Model.PageElements[index].Type" value="@Model.PageElements[index].Type">
+            <input type="hidden" asp-for="@Model.PageElements[index].SortOrder" value="@Model.PageElements[index].SortOrder">
+            <input type="hidden" asp-for="@Model.PageElements[index].ID" value="@Model.PageElements[index].ID">
+            <input type="hidden" asp-for="@Model.PageElements[index].PageID" value="@Model.PageElements[index].PageID">
+            <input type="hidden" asp-for="@Model.PageElements[index].GroupID" value="@Model.PageElements[index].GroupID">
+            
+            
+
+            @if(type == "Text"){
+                <div>
+                    <label asp-for="@Model.PageElements[index].Body">Text:</label>
+                    <input asp-for="@Model.PageElements[index].Body" value="@Model.PageElements[index].Body" />
+                </div>
+            }
+            else if(type == "Link"){
+                <div>
+                    <label asp-for="@Model.PageElements[index].LinkTitle">LinkTitle:</label>
+                    <input class="form-control" asp-for="@Model.PageElements[index].LinkTitle" value="@Model.PageElements[index].LinkTitle" />
+                    <label asp-for="@Model.PageElements[index].Path">Path:</label>
+                    <input class="form-control" asp-for="@Model.PageElements[index].Path" value="@Model.PageElements[index].Path" />
+                </div>
+            }
+            else if(type == "Blurb"){
+                <div>
+                    Text:
+                    <div class="summernote">@Model.PageElements[index].Body</div>
+                    <input type="hidden" asp-for="@Model.PageElements[index].Body" value="@Model.PageElements[index].Body">
+                </div>
+            }
+            else if(type == "Image"){
+
+                <div>
+                    <span>Image:</span>
+
+                    @if(Model.PageElements[index].ImagePath != null){
+                        <span>@Model.PageElements[index].FileName</span>
+                        <img src="@Model.PageElements[index].ImagePath" width="50" height="50" />
+                        <input type="hidden" asp-for="@Model.PageElements[index].FileName" value="@Model.PageElements[index].FileName">
+                        <input type="hidden" asp-for="@Model.PageElements[index].ImagePath" value="@Model.PageElements[index].ImagePath">
+                        
+                    } else{
+                        <input type="file" class="ignore-post" name="TempFile" id="TempFile-@index" onchange="Site.uploadImage(this, @Model.PageElements[index].ID, @pageID)" >
+                    }
+                </div>
+            }
+        <a asp-action="Delete" asp-controller="PageElement" asp-route-id="@Model.PageElements[index].ID">Delete</a>
+        </div>
+    
+    </div>
+
+}
+
+
+

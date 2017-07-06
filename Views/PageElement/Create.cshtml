@@ -1,0 +1,15 @@
+@model CMS.Models.PageElement
+
+<div>
+    <h1>Create New Page Element</h1>
+    <form asp-action="Create">
+        <label asp-for="Name"></label>
+        <input type="text" asp-for="Name" />
+        <label asp-for="Type"></label>
+        <select asp-for="Type"
+                asp-items="Html.GetEnumSelectList<PageElementType>()">
+        </select>
+        <input asp-for="PageID" type="hidden" value="@(ViewData["PageID"])">
+        <button type="submit">Create</button>
+    </form>
+</div>

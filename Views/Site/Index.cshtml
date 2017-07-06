@@ -1,0 +1,15 @@
+@model IEnumerable<CMS.Models.Site>
+
+@{
+    ViewData["Title"] = "Site Page";
+}
+
+<div>
+    <h1>Home</h1>
+    @foreach(var site in Model)
+    {
+        <div>@site.Name</div>
+        <div>@site.Url</div>
+        <a asp-action="Detail" asp-route-id="@site.ID">Edit</a>
+    }
+</div>

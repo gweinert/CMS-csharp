@@ -1,0 +1,17 @@
+@model CMS.Models.Page
+
+@{
+    ViewData["Title"] = "Create Page";
+}
+
+<div>Create Page</div>
+<p>SiteID: @ViewData["SiteID"]</p>
+<form asp-action="Create" method="post">
+    <label asp-for="Title"></label>
+    <input type="text" asp-for="Title"  />
+    <label asp-for="Link"></label>
+    <input type="text" asp-for="Link" />
+    <input type="hidden" asp-for="SiteID" value="@(ViewData["SiteID"])">
+    <input type="hidden" asp-for="ParentID" value="@(ViewData["ParentID"])">    
+    <button type="submit">Create</button>
+</form>

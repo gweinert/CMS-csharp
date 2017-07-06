@@ -1,0 +1,33 @@
+@model CMS.Models.PageElement
+
+<div class="form-group">
+    <div>index: @ViewData["index"]</div>
+    <label asp-for="@Model.Name">Name:</label> 
+    <input asp-for="@Model.Name" value="@Model.Name" />
+    <input type="hidden" asp-for="@Model.ID" value="@Model.ID">
+    <input type="hidden" asp-for="@Model.PageID" value="@Model.PageID">
+
+    @if(@Model.Type.ToString() == "Text"){
+        <div>
+            <label asp-for="@Model.Body">Text:</label>
+            <input asp-for="@Model.Body" value="@Model.Body" />
+        </div>
+    }
+    else if(@Model.Type.ToString() == "Link"){
+        <div>
+            <label asp-for="@Model.LinkTitle">LinkTitle:</label>
+            <input class="form-control" asp-for="@Model.LinkTitle" value="@Model.LinkTitle" />
+            <label asp-for="@Model.Path">Path:</label>
+            <input class="form-control" asp-for="@Model.Path" value="@Model.Path" />
+        </div>
+    }
+    else if(@Model.Type.ToString() == "Blurb"){
+        <div>
+            Text:
+            <div class="summernote">@Model.Body</div>
+        </div>
+    }
+    else{
+        <div></div>
+    }
+</div>
